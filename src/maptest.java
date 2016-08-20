@@ -4,6 +4,7 @@ import java.io.ObjectOutputStream;
 import java.io.OutputStream;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import pre_Poster.Pre_Poster;
 
@@ -23,7 +24,6 @@ public class maptest {
                 if(threadCounterAndAccepter(true)){
                     try {
                         Thread th = new Thread(new Runnable() {
-                            Object[][] posters;
 
                             @Override
                             public void run() {
@@ -38,11 +38,17 @@ public class maptest {
                                     InputStream IS = socket.getInputStream();
                                     ObjectInputStream OIS = new ObjectInputStream(IS);
 
-                                    Object[] obj = (Object[]) OIS.readObject();
-                                    System.out.println((int) obj[0]);
-                                    System.out.println((int) obj[1]);
-                                    System.out.println(obj[2].toString());
-                                    System.out.println((int) obj[3]);
+                                    ArrayList<Object> obj = (ArrayList<Object>) OIS.readObject();
+                                    System.out.println((int) obj.get(0));
+                                    System.out.println((int) obj.get(1));
+                                    System.out.println(obj.get(2).toString());
+                                    System.out.println((int) obj.get(3));
+                                    boolean[] bol=(boolean[])obj.get(4);
+                                    if(bol!=null) {
+                                        for (int i = 0; i < bol.length;i++) {
+                                            System.out.print("*** "+bol[i]+" ");
+                                        }
+                                    }
 
 
 
