@@ -1,4 +1,3 @@
-import com.sun.org.apache.xpath.internal.operations.Bool;
 
 import java.io.InputStream;
 import java.io.ObjectInputStream;
@@ -19,9 +18,9 @@ public class ClientThread implements Runnable{
     boolean[] dayOfWeek;
 
     int posterID;
-    
+
     ServerSocket server;
-    
+
     public ClientThread(ServerSocket server){
         this.server=server;
     }
