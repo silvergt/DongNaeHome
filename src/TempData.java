@@ -21,6 +21,7 @@ public class TempData {
     final static int STATUS_RECOMMENDATION=-100;
     final static int STATUS_POSTER_FULL = -200;
     final static int STATUS_POSTER_ABBREVIATED = -300;
+    final static int STATUS_CLICKED_LIKEBUTTON=-400;
 
     final static int ORDER_DATE=110;
     final static int ORDER_LIKE=120;

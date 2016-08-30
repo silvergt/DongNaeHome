@@ -1,3 +1,5 @@
+import com.sun.org.apache.xpath.internal.operations.Bool;
+
 import java.io.InputStream;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
@@ -9,11 +11,14 @@ import java.util.HashMap;
 
 public class ClientThread implements Runnable{
     int status;
+
     int order;
     String search;
     int startNum;
     boolean[] filterState;
     boolean[] dayOfWeek;
+
+    int posterID;
     
     ServerSocket server;
     
@@ -24,11 +29,20 @@ public class ClientThread implements Runnable{
     private boolean retrieveInformationFrom(ArrayList<Object> obj){
         try {
             status = (int) obj.get(0);
-            order = (int) obj.get(1);
-            search = obj.get(2).toString();
-            startNum = (int) obj.get(3);
-            filterState = (boolean[]) obj.get(4);
-            dayOfWeek=(boolean[])obj.get(5);
+            switch (status){
+                case TempData.STATUS_POSTER_ABBREVIATED:
+                case TempData.STATUS_POSTER_FULL:
+                case TempData.STATUS_RECOMMENDATION:
+                    order = (int) obj.get(1);
+                    search = obj.get(2).toString();
+                    startNum = (int) obj.get(3);
+                    filterState = (boolean[]) obj.get(4);
+                    dayOfWeek=(boolean[])obj.get(5);
+                    break;
+                case TempData.STATUS_CLICKED_LIKEBUTTON:
+                    posterID=(int)obj.get(1);
+            }
+
             return true;
         }catch (Exception e){
             System.out.println("retrieving information failed!!");
@@ -37,6 +51,19 @@ public class ClientThread implements Runnable{
 
     }
 
+    private Boolean increaseNumberData(){
+        try{
+            switch (status){
+                case TempData.STATUS_CLICKED_LIKEBUTTON:
+                    /** METHOD NEEDED **/
+                    break;
+            }
+        }catch (Exception e){
+            return false;
+        }
+
+        return true;
+    }
 
     private ArrayList<HashMap<String,Object>> postersFromSTATUS_RECOMMENDATION(){
         ArrayList<HashMap<String,Object>> posterList=new ArrayList<>();
@@ -133,10 +160,19 @@ public class ClientThread implements Runnable{
             if(filterState!=null) for (int i=0;i<filterState.length;i++)System.out.print(filterState[i]+" * ");System.out.println();
             if(dayOfWeek!=null)for (int i=0;i<dayOfWeek.length;i++)System.out.print(dayOfWeek[i]+" * ");System.out.println();
 
+
             OutputStream OS = socket.getOutputStream();
             ObjectOutputStream OOS = new ObjectOutputStream(OS);
-
-            OOS.writeObject(makePosterLists());
+            switch (status){
+                case TempData.STATUS_POSTER_ABBREVIATED:
+                case TempData.STATUS_POSTER_FULL:
+                case TempData.STATUS_RECOMMENDATION:
+                    OOS.writeObject(makePosterLists());
+                    break;
+                case TempData.STATUS_CLICKED_LIKEBUTTON:
+                    OOS.writeObject(increaseNumberData());
+                    break;
+            }
 
 
             System.out.println("END!");
