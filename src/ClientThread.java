@@ -30,7 +30,6 @@ public class ClientThread implements Runnable{
             status = (int) obj.get(0);
             switch (status){
                 case TempData.STATUS_POSTER_ABBREVIATED:
-                case TempData.STATUS_POSTER_FULL:
                 case TempData.STATUS_RECOMMENDATION:
                     order = (int) obj.get(1);
                     search = obj.get(2).toString();
@@ -38,8 +37,10 @@ public class ClientThread implements Runnable{
                     filterState = (boolean[]) obj.get(4);
                     dayOfWeek=(boolean[])obj.get(5);
                     break;
-                case TempData.STATUS_CLICKED_LIKEBUTTON:
+                case TempData.STATUS_POSTER_FULL:
+                case TempData.CLIENT_CLICKED_LIKEBUTTON:
                     posterID=(int)obj.get(1);
+                    break;
             }
 
             return true;
@@ -53,7 +54,7 @@ public class ClientThread implements Runnable{
     private Boolean increaseNumberData(){
         try{
             switch (status){
-                case TempData.STATUS_CLICKED_LIKEBUTTON:
+                case TempData.CLIENT_CLICKED_LIKEBUTTON:
                     /** METHOD NEEDED **/
                     break;
             }
@@ -168,7 +169,7 @@ public class ClientThread implements Runnable{
                 case TempData.STATUS_RECOMMENDATION:
                     OOS.writeObject(makePosterLists());
                     break;
-                case TempData.STATUS_CLICKED_LIKEBUTTON:
+                case TempData.CLIENT_CLICKED_LIKEBUTTON:
                     OOS.writeObject(increaseNumberData());
                     break;
             }
